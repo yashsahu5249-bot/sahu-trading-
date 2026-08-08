@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>साहू ट्रेडिंग कंपनी — अनाज व दाल व्यापारी</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Tiro+Devanagari+Hindi:ital@0;1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ledger-red:#8B2222;
+    --ledger-red-dark:#6E1A1A;
+    --paper:#EDE4CE;
+    --paper-light:#F5EFDC;
+    --ink:#2B2318;
+    --wheat:#C9972C;
+    --wheat-light:#E3B85C;
+    --jute:#4A3B28;
+    --dal-green:#6B7A3A;
+    --thread:#B5482F;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--jute);
+    color:var(--ink);
+    font-family:'Tiro Devanagari Hindi', serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  /* ===== texture backdrop ===== */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 40px),
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 40px);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
+
+  /* ===== ledger book shell ===== */
+  .ledger-book{
+    max-width:1080px;
+    margin:36px auto;
+    background:var(--paper);
+    position:relative;
+    box-shadow:0 30px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.15);
+    border-radius:2px;
+  }
+  .spine{
+    position:absolute; left:0; top:0; bottom:0; width:26px;
+    background:linear-gradient(90deg, var(--ledger-red-dark), var(--ledger-red) 55%, var(--ledger-red-dark));
+    box-shadow: inset -4px 0 10px rgba(0,0,0,0.35);
+  }
+  .spine::after{
+    content:"";
+    position:absolute; left:6px; top:0; bottom:0; width:2px;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,0.15) 0 10px, transparent 10px 20px);
+  }
+  @media (min-width:640px){
+    .ledger-book{padding-left:26px;}
+  }
+
+  /* ===== masthead / hero ===== */
+  .masthead{
+    position:relative; z-index:1;
+    padding:64px 32px 48px;
+    text-align:center;
+    border-bottom:3px double var(--jute);
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px; letter-spacing:0.25em;
+    color:var(--ledger-red);
+    text-transform:uppercase;
+    margin-bottom:18px;
+    opacity:0;
+    animation:fadeUp .7s ease forwards .1s;
+  }
+  h1.brand{
+    font-family:'Yatra One', cursive;
+    font-size:clamp(2.6rem, 7vw, 5rem);
+    color:var(--ledger-red);
+    line-height:1.15;
+    text-shadow:1px 1px 0 rgba(0,0,0,0.08);
+    opacity:0;
+    animation:fadeUp .8s ease forwards .25s;
+  }
+  .tagline{
+    font-size:clamp(1rem,2.4vw,1.3rem);
+    color:var(--jute);
+    margin-top:14px;
+    opacity:0;
+    animation:fadeUp .8s ease forwards .45s;
+  }
+  .estd-row{
+    display:flex; gap:28px; justify-content:center; flex-wrap:wrap;
+    margin-top:28px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    color:var(--jute);
+    opacity:0;
+    animation:fadeUp .8s ease forwards .6s;
+  }
+  .estd-row span{border-bottom:1px dashed var(--wheat); padding-bottom:2px;}
+
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(14px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  /* seal stamp */
+  .seal{
+    position:absolute; top:28px; right:28px;
+    width:84px; height:84px;
+    border:3px solid var(--dal-green);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--dal-green);
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px; text-align:center; letter-spacing:0.05em;
+    transform:rotate(-14deg);
+    opacity:0.85;
+    line-height:1.3;
+  }
+
+  /* ===== section shared ===== */
+  section{
+    position:relative; z-index:1;
+    padding:52px 32px;
+    border-bottom:1px solid rgba(74,59,40,0.25);
+  }
+  .section-head{
+    display:flex; align-items:baseline; gap:16px;
+    margin-bottom:30px;
+  }
+  .section-num{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--wheat);
+    font-size:14px;
+    border:1px solid var(--wheat);
+    padding:2px 8px;
+  }
+  .section-title{
+    font-family:'Yatra One', cursive;
+    font-size:clamp(1.5rem, 3.5vw, 2.1rem);
+    color:var(--ledger-red-dark);
+  }
+
+  /* ===== about ===== */
+  .about-grid{
+    display:grid; grid-template-columns:1.3fr 1fr; gap:40px;
+  }
+  @media (max-width:720px){ .about-grid{grid-template-columns:1fr;} }
+  .about-text p{margin-bottom:14px; font-size:1.05rem;}
+  .about-stats{
+    display:grid; grid-template-columns:1fr 1fr; gap:16px;
+    align-content:start;
+  }
+  .stat{
+    background:var(--paper-light);
+    border:1px solid rgba(74,59,40,0.25);
+    padding:16px;
+    text-align:center;
+  }
+  .stat b{
+    display:block; font-family:'JetBrains Mono', monospace;
+    font-size:1.8rem; color:var(--ledger-red);
+  }
+  .stat span{font-size:0.85rem; color:var(--jute);}
+
+  /* ===== products ===== */
+  .product-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr));
+    gap:14px;
+  }
+  .product-card{
+    background:var(--paper-light);
+    border:1px solid rgba(74,59,40,0.3);
+    padding:20px 16px;
+    text-align:center;
+    transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  .product-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 22px rgba(0,0,0,0.15);
+    border-color:var(--wheat);
+  }
+  .product-emoji{font-size:2rem; display:block; margin-bottom:8px;}
+  .product-name{font-weight:bold; color:var(--jute); font-size:1.05rem;}
+  .product-en{font-size:0.75rem; color:var(--ledger-red); font-family:'JetBrains Mono',monospace; margin-top:2px;}
+
+  /* ===== rate ledger table — signature element ===== */
+  .rate-ledger{
+    background:var(--paper-light);
+    border:1px solid var(--jute);
+    position:relative;
+    overflow:hidden;
+  }
+  .rate-ledger::before{
+    content:"";
+    position:absolute; left:60px; top:0; bottom:0; width:2px;
+    background:var(--thread); opacity:0.55;
+  }
+  .rate-note{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px; color:var(--jute);
+    padding:14px 24px 0 76px;
+  }
+  table.rates{
+    width:100%; border-collapse:collapse;
+    font-size:0.98rem;
+  }
+  table.rates th, table.rates td{
+    padding:12px 20px;
+    text-align:right;
+    border-bottom:1px dashed rgba(74,59,40,0.35);
+  }
+  table.rates th:first-child, table.rates td:first-child{
+    text-align:left; padding-left:76px;
+  }
+  table.rates th{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px; letter-spacing:0.05em;
+    color:var(--ledger-red);
+    text-transform:uppercase;
+    border-bottom:2px solid var(--jute);
+  }
+  table.rates td{font-family:'JetBrains Mono', monospace;}
+  table.rates tr:last-child td{border-bottom:none;}
+  table.rates tr:hover td{background:rgba(201,151,44,0.12);}
+  .rate-footnote{
+    padding:14px 24px 20px 76px;
+    font-size:0.8rem; color:var(--jute); opacity:0.85;
+  }
+
+  /* ===== why us ===== */
+  .why-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:22px;
+  }
+  .why-card{border-left:3px solid var(--wheat); padding-left:16px;}
+  .why-card h3{font-family:'Yatra One',cursive; color:var(--jute); font-size:1.15rem; margin-bottom:6px;}
+  .why-card p{font-size:0.92rem; color:var(--ink);}
+
+  /* ===== contact ===== */
+  .contact-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:40px;
+  }
+  @media (max-width:720px){ .contact-grid{grid-template-columns:1fr;} }
+  .contact-list{list-style:none;}
+  .contact-list li{
+    display:flex; gap:12px; margin-bottom:16px;
+    font-size:1rem; align-items:flex-start;
+  }
+  .contact-list b{
+    font-family:'JetBrains Mono', monospace; font-size:0.75rem;
+    color:var(--ledger-red); min-width:76px; padding-top:3px;
+  }
+  .cta-btn{
+    display:inline-block; margin-top:8px;
+    background:var(--ledger-red); color:var(--paper-light);
+    padding:14px 30px; font-family:'JetBrains Mono', monospace;
+    font-size:0.9rem; letter-spacing:0.04em;
+    border:none; cursor:pointer;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .cta-btn:hover{background:var(--ledger-red-dark); transform:translateY(-2px);}
+
+  form{display:flex; flex-direction:column; gap:12px;}
+  form input, form textarea{
+    font-family:'Tiro Devanagari Hindi', serif;
+    background:var(--paper-light);
+    border:1px solid rgba(74,59,40,0.4);
+    padding:12px 14px; font-size:0.95rem; color:var(--ink);
+  }
+  form input:focus, form textarea:focus{
+    outline:2px solid var(--wheat); outline-offset:1px;
+  }
+  form textarea{resize:vertical; min-height:90px;}
+
+  /* ===== footer ===== */
+  footer{
+    padding:28px 32px 40px;
+    text-align:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--jute);
+    position:relative; z-index:1;
+  }
+</style>
+</head>
+<body>
+
+<div class="ledger-book">
+  <div class="spine"></div>
+
+  <header class="masthead">
+    <div class="seal">शुद्ध<br>माल<br>प्रमाणित</div>
+    <div class="eyebrow">बही खाता · स्थापित 1998</div>
+    <h1 class="brand">साहू ट्रेडिंग कंपनी</h1>
+    <p class="tagline">अनाज, दाल एवं खाद्यान्न के थोक व्यापारी — खेत से बाज़ार तक भरोसे का सफ़र</p>
+    <div class="estd-row">
+      <span>📍 मंडी रोड, अनाज बाज़ार</span>
+      <span>📞 +91 98XXX XXXXX</span>
+      <span>🕐 सोम–शनि, सुबह 7 – शाम 8</span>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">हमारे बारे में</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>साहू ट्रेडिंग कंपनी पिछले ढाई दशकों से किसानों और थोक ख़रीदारों के बीच एक भरोसेमंद कड़ी रही है। हम सीधे मंडी से गेहूं, चावल, और हर प्रकार की दाल ख़रीदते हैं और उचित दर पर व्यापारियों, दुकानदारों व फ़ैक्ट्रियों को आपूर्ति करते हैं।</p>
+        <p>हमारा गोदाम आधुनिक भंडारण सुविधाओं से युक्त है, जिससे माल की गुणवत्ता और वज़न में कोई समझौता नहीं होता। हर सौदा, हर तौल — बही में साफ़-साफ़ दर्ज।</p>
+      </div>
+      <div class="about-stats">
+        <div class="stat"><b>26+</b><span>वर्षों का अनुभव</span></div>
+        <div class="stat"><b>15+</b><span>अनाज व दाल की किस्में</span></div>
+        <div class="stat"><b>500+</b><span>नियमित ग्राहक</span></div>
+        <div class="stat"><b>1000 टन</b><span>भंडारण क्षमता</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section id="products">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">हमारे उत्पाद</h2>
+    </div>
+    <div class="product-grid">
+      <div class="product-card"><span class="product-emoji">🌾</span><div class="product-name">गेहूं</div><div class="product-en">Wheat</div></div>
+      <div class="product-card"><span class="product-emoji">🍚</span><div class="product-name">चावल</div><div class="product-en">Rice</div></div>
+      <div class="product-card"><span class="product-emoji">🫘</span><div class="product-name">चना</div><div class="product-en">Chana / Gram</div></div>
+      <div class="product-card"><span class="product-emoji">🫛</span><div class="product-name">मूंग दाल</div><div class="product-en">Moong Dal</div></div>
+      <div class="product-card"><span class="product-emoji">🟤</span><div class="product-name">मसूर दाल</div><div class="product-en">Masoor Dal</div></div>
+      <div class="product-card"><span class="product-emoji">🟡</span><div class="product-name">तूर / अरहर</div><div class="product-en">Toor Dal</div></div>
+      <div class="product-card"><span class="product-emoji">⚪</span><div class="product-name">उड़द दाल</div><div class="product-en">Urad Dal</div></div>
+      <div class="product-card"><span class="product-emoji">🌽</span><div class="product-name">मक्का</div><div class="product-en">Maize</div></div>
+    </div>
+  </section>
+
+  <!-- RATES -->
+  <section id="rates">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">आज का भाव</h2>
+    </div>
+    <div class="rate-ledger">
+      <p class="rate-note">दिनांक: ____ / ____ / 2026 — भाव प्रति क्विंटल (₹)</p>
+      <table class="rates">
+        <thead>
+          <tr><th>जिंस</th><th>न्यूनतम</th><th>अधिकतम</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>गेहूं (Wheat)</td><td>—</td><td>—</td></tr>
+          <tr><td>चावल (Rice)</td><td>—</td><td>—</td></tr>
+          <tr><td>चना (Chana)</td><td>—</td><td>—</td></tr>
+          <tr><td>मूंग दाल (Moong)</td><td>—</td><td>—</td></tr>
+          <tr><td>मसूर दाल (Masoor)</td><td>—</td><td>—</td></tr>
+          <tr><td>तूर दाल (Toor)</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <p class="rate-footnote">* ताज़ा भाव के लिए कृपया फ़ोन पर संपर्क करें। भाव मंडी की स्थिति अनुसार प्रतिदिन बदलते हैं।</p>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section id="why">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">हमसे क्यों जुड़ें</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <h3>शुद्ध व जांचा-परखा माल</h3>
+        <p>हर खेप गुणवत्ता जांच के बाद ही गोदाम में रखी जाती है।</p>
+      </div>
+      <div class="why-card">
+        <h3>सही तौल, सही दाम</h3>
+        <p>इलेक्ट्रॉनिक कांटे पर पारदर्शी तौल — पुराने ग्राहकों का यही भरोसा है।</p>
+      </div>
+      <div class="why-card">
+        <h3>थोक व फुटकर दोनों</h3>
+        <p>छोटे दुकानदार से लेकर बड़े फ़ैक्ट्री ऑर्डर तक, हर मात्रा में आपूर्ति।</p>
+      </div>
+      <div class="why-card">
+        <h3>समय पर डिलीवरी</h3>
+        <p>अपने वाहनों से शहर व आस-पास के क्षेत्रों में सीधी सप्लाई।</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2 class="section-title">संपर्क करें</h2>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <ul class="contact-list">
+          <li><b>पता</b><span>साहू ट्रेडिंग कंपनी, मंडी रोड, अनाज बाज़ार, [शहर का नाम], [राज्य]</span></li>
+          <li><b>फ़ोन</b><span>+91 98XXX XXXXX / +91 97XXX XXXXX</span></li>
+          <li><b>ईमेल</b><span>info@sahutrading.example</span></li>
+          <li><b>समय</b><span>सोमवार से शनिवार, सुबह 7 बजे से शाम 8 बजे तक</span></li>
+        </ul>
+        <a href="tel:+919800000000" class="cta-btn">📞 अभी कॉल करें</a>
+      </div>
+      <div>
+        <form onsubmit="event.preventDefault(); alert('धन्यवाद! हम जल्द ही आपसे संपर्क करेंगे।');">
+          <input type="text" placeholder="आपका नाम" required>
+          <input type="tel" placeholder="मोबाइल नंबर" required>
+          <input type="text" placeholder="ज़रूरत का सामान (जैसे: गेहूं 50 क्विंटल)">
+          <textarea placeholder="अपना संदेश लिखें..."></textarea>
+          <button type="submit" class="cta-btn">पूछताछ भेजें</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 साहू ट्रेडिंग कंपनी — सभी अधिकार सुरक्षित · यह एक नमूना (डेमो) वेबसाइट है
+  </footer>
+</div>
+
+</body>
+</html>
